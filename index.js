@@ -9,11 +9,14 @@ const db = new pg.Client({
   user: "postgres",
   host: "localhost",
   database: "learning_apis",
-  password: "india@11",
+  password: "@Drr9693",
+  // password: "india@11",
+  // password: "112369",
+
   port: 5432,
 });
 
-// db.connect();
+db.connect();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
