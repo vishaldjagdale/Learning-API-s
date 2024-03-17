@@ -18,12 +18,43 @@ db.connect();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
+//database functions
+async function verifyUsernameAndPassword(username, password) {
+  var pass1 = await db.query("SELECT password FROM users WHERE username = $1", [
+    username,
+  ]);
+  var pass1 = pass1.rows[0].password;
+  console.log(pass1);
+
+  if (pass1) {
+    if (pass1 == password) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    return false; // change return logic here...
+  }
+}
+
 app.get("/", async (req, res) => {
   res.render("login.ejs");
 });
 
-app.post("/login", (req, res) => {
+app.post("/login", async (req, res) => {
   //logic for login ..
+  const username = req.body.username;
+  const password = req.body.password;
+
+  // verify username and  password
+  const result = await verifyUsernameAndPassword(username, password);
+
+  if (result) {
+    res.redirect("/main");
+  } else {
+    console.log("Incorrect password");
+    res.redirect("/");
+  }
 });
 
 app.get("/signup", (req, res) => {
@@ -32,6 +63,7 @@ app.get("/signup", (req, res) => {
 
 app.get("/main", (req, res) => {
   // direct to the main page from anywhere : implement
+  res.render("index.ejs");
 });
 
 app.post("/cat", (req, res) => {
