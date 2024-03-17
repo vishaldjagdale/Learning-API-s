@@ -12,8 +12,10 @@ const db = new pg.Client({
   user: "postgres",
   host: "localhost",
   database: "learning_apis",
-  password: "india@11",
+  password: "@Drr9693",
+  // password: "india@11",
   // password: "112369",
+
   port: 5432,
 });
 
@@ -48,6 +50,45 @@ async function verifyUsernameAndPassword(username, password) {
     }
   } else {
     return false; // change return logic here...
+  }
+}
+
+async function fetchJokes(limit) {
+  try {
+    const response = await axios.get("https://api.api-ninjas.com/v1/jokes", {
+      params: {
+        limit: limit,
+      },
+      headers: {
+        "X-Api-Key": "fSWD+Nl0yeDr0Kbn0McuEw==f0tVM2ksTHM73Sgy", // Replace 'YOUR_API_KEY' with your actual API key
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
+async function getWeather(longitude, latitude, res) {
+  const apiKey = "90c525eba6dce8ed86c569dce30449d8";
+  const apiUrl = "https://api.openweathermap.org/data/2.5/weather";
+
+  try {
+    const response = await axios.get(apiUrl, {
+      params: {
+        lat: latitude,
+        lon: longitude,
+        appid: apiKey,
+        units: "metric",
+      },
+    });
+
+    const data = response.data;
+
+    res.render("weather.ejs", { data });
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    res.status(500).json({ error: "Failed to fetch weather data" });
   }
 }
 
@@ -96,35 +137,28 @@ app.get("/cat", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch weather data" });
   }
 });
-app.post("/images", (req, res) => {
-  // code for returning api data ...
+
+// const axios = require('axios');
+
+app.post("/randomImages", (req, res) => {
+  const apiUrl = "https://source.unsplash.com/random/"; // Replace 'YOUR_API_URL' with the actual API URL
+
+  axios
+    .get(apiUrl, { responseType: "arraybuffer" }) // Set responseType to arraybuffer to receive image data
+    .then((response) => {
+      const imageData = Buffer.from(response.data, "binary").toString("base64"); // Convert image data to base64
+      const base64Image = `data:image/jpeg;base64,${imageData}`; // Create base64 image URL
+      res.send(`<img src="${base64Image}" alt="Random Image"/>`); // Send the image as HTML to the client
+    })
+    .catch((error) => {
+      console.error("Request failed:", error.message);
+      res.status(500).send("Request failed"); // Sending an error response to the client
+    });
 });
+
 app.post("/quotes", (req, res) => {
   // code for returning api data ...
 });
-
-async function getWeather(longitude, latitude, res) {
-  const apiKey = "90c525eba6dce8ed86c569dce30449d8";
-  const apiUrl = "https://api.openweathermap.org/data/2.5/weather";
-
-  try {
-    const response = await axios.get(apiUrl, {
-      params: {
-        lat: latitude,
-        lon: longitude,
-        appid: apiKey,
-        units: "metric",
-      },
-    });
-
-    const data = response.data;
-
-    res.render("weather.ejs", { data });
-  } catch (error) {
-    console.error("Error fetching weather data:", error);
-    res.status(500).json({ error: "Failed to fetch weather data" });
-  }
-}
 
 app.get("/weather", async (req, res) => {
   const latitude = 18.51;
@@ -135,6 +169,21 @@ app.post("/weather", async (req, res) => {
   const latitude = req.body.latitude;
   const longitude = req.body.longitude;
   await getWeather(longitude, latitude, res);
+});
+
+app.post("/jokes", async (req, res) => {
+  const limit = 3; // Set your desired limit here
+
+  try {
+    const response = await fetchJokes(limit);
+    // console.log(response);
+    // res.send(response);
+    const data = response;
+    res.render("jokes.ejs", { data });
+  } catch (error) {
+    console.error("Request failed:", error);
+    res.status(500).send("Request failed");
+  }
 });
 
 app.listen(port, () => {

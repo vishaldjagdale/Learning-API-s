@@ -7,12 +7,24 @@
     <body>
         <%- include('partials/header.ejs'); -%>
 
-            <h1>3. Daily Tips:</h1>
-            <h3>Had Fun with Random Image Gallery? Here is something more exciting. Yes, Use an API to fetch some Quotes and display them on daily basis as the Quote of the Day. There are APIs that give daily quotes as responses and other Apis that give you
-                any random Quote each time you fetch it via a request. Quick Question: How will you make a constant Quote visible for at least one day no matter any time you reload your App? (Ask in comments if you can’t get it).</h3>
-            <h3>Here is how it looks like:</h3>
-            <img src="https://miro.medium.com/v2/resize:fit:1400/format:webp/1*2AGJH79vX8UrcA-7cm97IQ.png">
-            <p>APIS URL:https://zenquotes.io/api/today , https://api.adviceslip.com/advice</p>
+
+            <div class="card text-center">
+                <div class="card-header">
+                    Quotes
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <%=data.q %>
+                    </h5>
+                    <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+                    <button type="button" class="btn btn-outline-info"><%= data.a %></button>
+                </div>
+                <div class="card-footer text-body-secondary">
+                    2 days ago
+                </div>
+            </div>
+
+            <!-- <%- data.h %> -->
 
             <%- include('partials/footer.ejs'); -%>
 
