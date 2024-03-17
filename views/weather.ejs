@@ -1,29 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+  <%- include('partials/head.ejs'); -%>
 
-<%- include('partials/head.ejs'); -%>
+  <body>
+    <%- include('partials/header.ejs'); -%>
 
+    <h1>4. Weather App :</h1>
 
-    <body>
-        <%- include('partials/header.ejs'); -%>
+    <h3>
+      Have You Ever Wondered how weather apps predict the weather? They don't
+      have their own satellites but They do access some Weather API and display
+      the results on their Apps.
+    </h3>
+    <h2>Weather Data</h2>
+    <ul>
+      <li>Temperature: <%= data.main.temp %> K</li>
+      <li>Humidity: <%= data.main.humidity %>%</li>
+      <li>Description: <%= data.weather[0].description %></li>
+    </ul>
 
-            <h1>4. Weather App :</h1>
-
-            <h3>Have You Ever Wondered how weather apps predict the weather? They don't have their own satellites but They do access some Weather API and display the results on their Apps.</h3>
-
-            <br>
-            <br>
-            <h3>Let’s create our own Weather app. All we need is an API and a cool User Interface.</h3>
-            <br>
-            <br>
-
-
-            <img src="https://miro.medium.com/v2/resize:fit:828/format:webp/1*hf-7_unZdm-4DGh40uXU2w.png">
-            <br>
-            <br>
-            <p>API URL:</p>
-            <%- include('partials/footer.ejs'); -%>
-
-    </body>
-
+    <%- include('partials/footer.ejs'); -%>
+  </body>
 </html>
