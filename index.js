@@ -8,7 +8,7 @@ const port = 3000;
 const db = new pg.Client({
   user: "postgres",
   host: "localhost",
-  database: "permalist",
+  database: "learning_apis",
   password: "india@11",
   port: 5432,
 });
@@ -18,17 +18,33 @@ db.connect();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
 
-// // Database functions
-// async function addTaskDB(newtitle) {
-//   if (newtitle === null) {
-//     console.log("Can't insert null value");
-//   } else {
-//     await db.query("INSERT INTO items (title) VALUES ($1)", [newtitle]);
-//   }
-// }
-
 app.get("/", async (req, res) => {
-  res.render("index.ejs");
+  res.render("login.ejs");
+});
+
+app.post("/login", (req, res) => {
+  //logic for login ..
+});
+
+app.get("/signup", (req, res) => {
+  //logic for signup ...
+});
+
+app.get("/main", (req, res) => {
+  // direct to the main page from anywhere : implement
+});
+
+app.post("/cat", (req, res) => {
+  // code for returning api data ...
+});
+app.post("/images", (req, res) => {
+  // code for returning api data ...
+});
+app.post("/quotes", (req, res) => {
+  // code for returning api data ...
+});
+app.post("/weather", (req, res) => {
+  // code for returning api data ...
 });
 
 app.listen(port, () => {
