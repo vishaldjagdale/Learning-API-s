@@ -28,13 +28,19 @@
                   With supporting text below as a natural lead-in to additional
                   content.
                 </p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
+                <!-- <a href="#" class="btn btn-primary">Generate</a> -->
+                <form action="/randomImages" method="post">
+                  <button type="submit" class="btn btn-primary">
+                    Generate
+                  </button>
+                </form>
               </div>
             </div>
           </div>
         </div>
         <br />
         <br />
+
         <div class="row">
           <div class="col-sm-6">
             <div class="card">
@@ -65,6 +71,28 @@
             </div>
           </div>
         </div>
+        <br/>
+        <br/>
+        <div class="col-sm-6">
+          <div class="card">
+            <div class="card-body">
+              <h5 class="card-title">Random jokes generator</h5>
+              <p class="card-text">
+                With supporting text below as a natural lead-in to additional
+                content.
+              </p>
+              <!-- <a href="#" class="btn btn-primary">Generate</a> -->
+              <form action="/jokes" method="post">
+                <button type="submit" class="btn btn-primary">
+                  Generate jokes
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <br />
       </div>
     </main>
     <%- include('partials/footer.ejs'); -%>

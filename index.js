@@ -2,6 +2,7 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import axios from "axios";
+import { request } from "express";
 
 const app = express();
 const port = 3000;
@@ -42,6 +43,22 @@ async function verifyUsernameAndPassword(username, password) {
   }
 }
 
+async function fetchJokes(limit) {
+  try {
+    const response = await axios.get('https://api.api-ninjas.com/v1/jokes', {
+      params: {
+        limit: limit
+      },
+      headers: {
+        'X-Api-Key': 'fSWD+Nl0yeDr0Kbn0McuEw==f0tVM2ksTHM73Sgy' // Replace 'YOUR_API_KEY' with your actual API key
+      }
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+}
+
 app.get("/", async (req, res) => {
   res.render("login.ejs");
 });
@@ -74,11 +91,31 @@ app.get("/main", (req, res) => {
 app.post("/cat", (req, res) => {
   // code for returning api data ...
 });
-app.post("/images", (req, res) => {
-  // code for returning api data ...
+
+// const axios = require('axios');
+
+app.post("/randomImages", (req, res) => {
+  const apiUrl = 'https://source.unsplash.com/random/'; // Replace 'YOUR_API_URL' with the actual API URL
+
+  axios.get(apiUrl, { responseType: 'arraybuffer' }) // Set responseType to arraybuffer to receive image data
+    .then(response => {
+      const imageData = Buffer.from(response.data, 'binary').toString('base64'); // Convert image data to base64
+      const base64Image = `data:image/jpeg;base64,${imageData}`; // Create base64 image URL
+      res.send(`<img src="${base64Image}" alt="Random Image"/>`); // Send the image as HTML to the client
+    })
+    .catch(error => {
+      console.error('Request failed:', error.message);
+      res.status(500).send('Request failed'); // Sending an error response to the client
+    });
 });
+
+
+
+
 app.post("/quotes", (req, res) => {
   // code for returning api data ...
+  
+  
 });
 
 app.post("/weather", async (req, res) => {
@@ -102,6 +139,22 @@ app.post("/weather", async (req, res) => {
   } catch (error) {
     console.error("Error fetching weather data:", error);
     res.status(500).json({ error: "Failed to fetch weather data" });
+  }
+});
+
+app.post("/jokes", async (req, res) => {
+  const limit = 3; // Set your desired limit here
+  
+  try {
+    const response = await fetchJokes(limit);
+    // console.log(response);
+    // res.send(response);
+    const data = response;
+    res.render("jokes.ejs", { data });
+
+  } catch (error) {
+    console.error('Request failed:', error);
+    res.status(500).send('Request failed');
   }
 });
 
