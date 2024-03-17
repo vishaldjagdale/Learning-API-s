@@ -4,6 +4,9 @@ import pg from "pg";
 import axios from "axios";
 import { fileURLToPath } from "url";
 import path from "path";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 const port = 3000;
@@ -70,7 +73,7 @@ async function fetchJokes(limit) {
 }
 
 async function getWeather(longitude, latitude, res) {
-  const apiKey = "90c525eba6dce8ed86c569dce30449d8";
+  const apiKey = process.env.WEATHER_API_KEY;
   const apiUrl = "https://api.openweathermap.org/data/2.5/weather";
 
   try {
