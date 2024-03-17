@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+  <%- include('partials/head.ejs'); -%>
+
+  <body>
+    <%- include('partials/header.ejs'); -%>
+
+    <h1>4. Weather App :</h1>
+
+    <h3>
+      Have You Ever Wondered how weather apps predict the weather? They don't
+      have their own satellites but They do access some Weather API and display
+      the results on their Apps.
+    </h3>
+    <h2>Weather Data</h2>
+    <ul>
+      <li>Temperature: <%= data.main.temp %> K</li>
+      <li>Humidity: <%= data.main.humidity %>%</li>
+      <li>Description: <%= data.weather[0].description %></li>
+    </ul>
+
+    <%- include('partials/footer.ejs'); -%>
+  </body>
+</html>
