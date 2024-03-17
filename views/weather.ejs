@@ -5,19 +5,91 @@
   <body>
     <%- include('partials/header.ejs'); -%>
 
-    <h1>4. Weather App :</h1>
+    <section class="vh-100">
+      <div class="container py-5 h-100">
+        <div class="row d-flex justify-content-center align-items-center h-100">
+          <div class="col-md-8 col-lg-6 col-xl-4">
+            <h3 class="mb-4 pb-2 fw-normal">Check the weather forecast</h3>
 
-    <h3>
-      Have You Ever Wondered how weather apps predict the weather? They don't
-      have their own satellites but They do access some Weather API and display
-      the results on their Apps.
-    </h3>
-    <h2>Weather Data</h2>
-    <ul>
-      <li>Temperature: <%= data.main.temp %> K</li>
-      <li>Humidity: <%= data.main.humidity %>%</li>
-      <li>Description: <%= data.weather[0].description %></li>
-    </ul>
+            <form action="/weather" method="post">
+              <div class="form-floating mb-3">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="floatingInput"
+                  name="longitude"
+                  value="73.85"
+                />
+                <label for="floatingInput">Enter Longitude</label>
+              </div>
+              <div class="form-floating">
+                <input
+                  type="number"
+                  class="form-control"
+                  id="floatingPassword"
+                  name="latitude"
+                  value="18.51"
+                />
+                <label for="floatingPassword">Enter Latitude</label>
+              </div>
+              <br />
+              <button type="submit" class="btn btn-outline-success">
+                Get Weather
+              </button>
+            </form>
+            <br />
+
+            <div class="card shadow-0 border btn-outline-info">
+              <div class="card-body p-4">
+                <h4 class="mb-1 sfw-normal"><%= data.sys.country %></h4>
+                <p class="mb-2">
+                  <i class="bi bi-thermometer-sun"></i>
+                  Current temperature: <strong><%= data.main.temp %> %C</strong>
+                </p>
+                <p>
+                  Feels like: <strong><%= data.main.feels_like %> %C</strong>
+                </p>
+                <p>
+                  <i class="bi bi-wind"></i>
+                  Wind Speed: <strong><%= data.wind.speed %> m/s</strong>
+                </p>
+                <p>
+                  <i class="bi bi-droplet-half"></i>
+                  Humidity:
+                  <strong
+                    ><%= data.main.humidity %> grams/m <sup>3</sup>
+                  </strong>
+                </p>
+                <p>
+                  <i class="bi bi-fullscreen"></i> Max:
+                  <strong><%= data.main.temp_max %> %C</strong>,
+                  <i class="bi bi-fullscreen-exit"></i> Min:
+                  <strong><%= data.main.temp_min %> %C</strong>
+                </p>
+
+                <div class="d-flex flex-row align-items-center">
+                  <p class="mb-0 me-4"><%= data.weather[0].description %></p>
+                  <i class="fas fa-cloud fa-3x" style="color: #eee"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- <div class="container">
+      <div class="card" style="width: 18rem">
+        <div class="card-header">Weather Data</div>
+        <ul class="list-group list-group-flush">
+          <li class="list-group-item">Temperature: <%= data.main.temp %> K</li>
+          <li class="list-group-item">Humidity: <%= data.main.humidity %>%</li>
+          <li class="list-group-item">
+            Description: <%= data.weather[0].description %>
+          </li>
+        </ul>
+      </div>
+    </div> -->
 
     <%- include('partials/footer.ejs'); -%>
   </body>

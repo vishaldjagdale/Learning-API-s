@@ -2,7 +2,8 @@ import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
 import axios from "axios";
-import { request } from "express";
+import { fileURLToPath } from "url";
+import path from "path";
 
 const app = express();
 const port = 3000;
@@ -21,7 +22,16 @@ const db = new pg.Client({
 db.connect();
 
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.static("public"));
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Serve static files from the public directory
+app.use(express.static(path.join(__dirname, "public")));
+
+// Serve static files from the node_modules directory
+app.use("/node_modules", express.static(path.join(__dirname, "node_modules")));
+
 app.set("view engine", "ejs"); // Set the view engine to use EJS templates
 
 //database functions
@@ -118,9 +128,7 @@ app.post("/quotes", (req, res) => {
   
 });
 
-app.post("/weather", async (req, res) => {
-  const latitude = 44.34;
-  const longitude = 10.99;
+async function getWeather(longitude, latitude, res) {
   const apiKey = "90c525eba6dce8ed86c569dce30449d8";
   const apiUrl = "https://api.openweathermap.org/data/2.5/weather";
 
@@ -130,6 +138,7 @@ app.post("/weather", async (req, res) => {
         lat: latitude,
         lon: longitude,
         appid: apiKey,
+        units: "metric",
       },
     });
 
@@ -140,6 +149,17 @@ app.post("/weather", async (req, res) => {
     console.error("Error fetching weather data:", error);
     res.status(500).json({ error: "Failed to fetch weather data" });
   }
+}
+
+app.get("/weather", async (req, res) => {
+  const latitude = 18.51;
+  const longitude = 73.85;
+  await getWeather(longitude, latitude, res);
+});
+app.post("/weather", async (req, res) => {
+  const latitude = req.body.latitude;
+  const longitude = req.body.longitude;
+  await getWeather(longitude, latitude, res);
 });
 
 app.post("/jokes", async (req, res) => {
