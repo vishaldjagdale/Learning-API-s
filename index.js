@@ -1,6 +1,7 @@
 import express from "express";
 import bodyParser from "body-parser";
 import pg from "pg";
+import axios from "axios";
 
 const app = express();
 const port = 3000;
@@ -10,6 +11,7 @@ const db = new pg.Client({
   host: "localhost",
   database: "learning_apis",
   password: "india@11",
+  // password: "112369",
   port: 5432,
 });
 
@@ -17,6 +19,7 @@ db.connect();
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static("public"));
+app.set("view engine", "ejs"); // Set the view engine to use EJS templates
 
 //database functions
 async function verifyUsernameAndPassword(username, password) {
@@ -75,8 +78,29 @@ app.post("/images", (req, res) => {
 app.post("/quotes", (req, res) => {
   // code for returning api data ...
 });
-app.post("/weather", (req, res) => {
-  // code for returning api data ...
+
+app.post("/weather", async (req, res) => {
+  const latitude = 44.34;
+  const longitude = 10.99;
+  const apiKey = "90c525eba6dce8ed86c569dce30449d8";
+  const apiUrl = "https://api.openweathermap.org/data/2.5/weather";
+
+  try {
+    const response = await axios.get(apiUrl, {
+      params: {
+        lat: latitude,
+        lon: longitude,
+        appid: apiKey,
+      },
+    });
+
+    const data = response.data;
+
+    res.render("weather.ejs", { data });
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    res.status(500).json({ error: "Failed to fetch weather data" });
+  }
 });
 
 app.listen(port, () => {
