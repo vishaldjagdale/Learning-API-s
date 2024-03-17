@@ -12,8 +12,8 @@ const db = new pg.Client({
   user: "postgres",
   host: "localhost",
   database: "learning_apis",
-  password: "@Drr9693",
-  // password: "india@11",
+  // password: "@Drr9693",
+  password: "india@11",
   // password: "112369",
 
   port: 5432,
@@ -156,8 +156,22 @@ app.post("/randomImages", (req, res) => {
     });
 });
 
-app.post("/quotes", (req, res) => {
+app.post("/quotes", async (req, res) => {
   // code for returning api data ...
+
+  const apiUrl = "https://zenquotes.io/api/today";
+
+  try {
+    const response = await axios.get(apiUrl);
+    const data = response.data[0];
+    // console.log(response.data[0]);
+    res.render("quotes.ejs", {
+      data: data,
+    });
+  } catch (error) {
+    console.error("Error fetching Quotes data:", error);
+    res.status(500).json({ error: "Failed to fetch Quotes data" });
+  }
 });
 
 app.get("/weather", async (req, res) => {
