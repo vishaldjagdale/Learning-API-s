@@ -80,8 +80,21 @@ app.get("/main", (req, res) => {
   res.render("index.ejs");
 });
 
-app.post("/cat", (req, res) => {
+app.get("/cat", async (req, res) => {
   // code for returning api data ...
+
+  const apiUrl = "https://api.thecatapi.com/v1/images/search";
+
+  try {
+    const response = await axios.get(apiUrl);
+    // console.log(response.data);
+    res.render("cat.ejs", {
+      response: response.data[0].url,
+    });
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    res.status(500).json({ error: "Failed to fetch weather data" });
+  }
 });
 app.post("/images", (req, res) => {
   // code for returning api data ...
