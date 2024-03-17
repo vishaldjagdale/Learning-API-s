@@ -36,21 +36,21 @@ app.set("view engine", "ejs"); // Set the view engine to use EJS templates
 
 //database functions
 async function verifyUsernameAndPassword(username, password) {
-  var pass1 = await db.query("SELECT password FROM users WHERE username = $1", [
-    username,
-  ]);
-  var pass1 = pass1.rows[0].password;
-  console.log(pass1);
+    var pass1 = await db.query("SELECT password FROM users WHERE username = $1", [
+        username,
+    ]);
+    var pass1 = pass1.rows[0].password;
+    console.log(pass1);
 
-  if (pass1) {
-    if (pass1 == password) {
-      return true;
+    if (pass1) {
+        if (pass1 == password) {
+            return true;
+        } else {
+            return false;
+        }
     } else {
-      return false;
+        return false; // change return logic here...
     }
-  } else {
-    return false; // change return logic here...
-  }
 }
 
 async function fetchJokes(limit) {
@@ -73,33 +73,33 @@ app.get("/", async (req, res) => {
   res.render("login.ejs");
 });
 
-app.post("/login", async (req, res) => {
-  //logic for login ..
-  const username = req.body.username;
-  const password = req.body.password;
+app.post("/login", async(req, res) => {
+    //logic for login ..
+    const username = req.body.username;
+    const password = req.body.password;
 
-  // verify username and  password
-  const result = await verifyUsernameAndPassword(username, password);
+    // verify username and  password
+    const result = await verifyUsernameAndPassword(username, password);
 
-  if (result) {
-    res.redirect("/main");
-  } else {
-    console.log("Incorrect password");
-    res.redirect("/");
-  }
+    if (result) {
+        res.redirect("/main");
+    } else {
+        console.log("Incorrect password");
+        res.redirect("/");
+    }
 });
 
 app.get("/signup", (req, res) => {
-  //logic for signup ...
+    //logic for signup ...
 });
 
 app.get("/main", (req, res) => {
-  // direct to the main page from anywhere : implement
-  res.render("index.ejs");
+    // direct to the main page from anywhere : implement
+    res.render("index.ejs");
 });
 
 app.post("/cat", (req, res) => {
-  // code for returning api data ...
+    // code for returning api data ...
 });
 
 // const axios = require('axios');
@@ -142,7 +142,7 @@ async function getWeather(longitude, latitude, res) {
       },
     });
 
-    const data = response.data;
+        const data = response.data;
 
     res.render("weather.ejs", { data });
   } catch (error) {
@@ -179,5 +179,5 @@ app.post("/jokes", async (req, res) => {
 });
 
 app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+    console.log(`Server running on port ${port}`);
 });

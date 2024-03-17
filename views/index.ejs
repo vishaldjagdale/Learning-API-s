@@ -1,63 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('partials/head.ejs'); -%>
+<%- include('partials/head.ejs'); -%>
 
-  <body>
-    <%- include('partials/header.ejs'); -%>
+    <body>
+        <%- include('partials/header.ejs'); -%>
 
-    <main>
-      <div class="container">
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Cat Image Generator</h5>
-                <p class="card-text">
-                  With supporting text below as a natural lead-in to additional
-                  content.
-                </p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Random Image Generator</h5>
-                <p class="card-text">
-                  With supporting text below as a natural lead-in to additional
-                  content.
-                </p>
-                <!-- <a href="#" class="btn btn-primary">Generate</a> -->
+            <main>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Cat Image Generator</h5>
+                                    <p class="card-text">
+                                        With supporting text below as a natural lead-in to additional content.
+                                    </p>
+                                    <a href="#" class="btn btn-primary">Go somewhere</a>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Random Image Generator</h5>
+                                    <p class="card-text">
+                                        With supporting text below as a natural lead-in to additional content.
+                                    </p>
+                                    <!-- <a href="#" class="btn btn-primary">Generate</a> -->
                 <form action="/randomImages" method="post">
                   <button type="submit" class="btn btn-primary">
                     Generate
                   </button>
                 </form>
-              </div>
-            </div>
-          </div>
-        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
         <!-- <br /> -->
-        <br />
+                    <br />
+            
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Daily Quotes</h5>
 
-        <div class="row">
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Daily Quotes</h5>
-                <p class="card-text">
-                  With supporting text below as a natural lead-in to additional
-                  content.
-                </p>
-                <a href="#" class="btn btn-primary">Go somewhere</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-6">
-            <div class="card">
-              <div class="card-body">
-                <h5 class="card-title">Todays Weather</h5>
+                                    <p class="card-text">
+                                        With supporting text below as a natural lead-in to additional content.
+                                    </p>
+                                    <form action="/quotes" method="post">
+                                        <button type="submit" class="btn btn-primary">
+                                            Read Quotes
+                                        </button>
+                                    </form>
+                                    <!-- <a href="#" class="btn btn-primary">Go somewhere</a> -->
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h5 class="card-title">Todays Weather</h5>
                 <p class="card-text">
                   In this way, modify code in index.ejs for other 3 Cards ...
                 </p>
@@ -86,19 +89,19 @@
             <div class="card">
               <div class="card-body">
                 <h5 class="card-title">new api 6</h5>
-                <p class="card-text">
-                  In this way, modify code in index.ejs for other 3 Cards ...
-                </p>
-                <!-- <a href="/weather" class="btn btn-primary">Go somewhere</a> -->
-                <form action="/weather" method="post">
-                  <button type="submit" class="btn btn-primary">
-                    Get Todays Weather
-                  </button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
+                                    <p class="card-text">
+                                        In this way, modify code in index.ejs for other 3 Cards ...
+                                    </p>
+                                    <!-- <a href="/weather" class="btn btn-primary">Go somewhere</a> -->
+                                    <form action="/weather" method="post">
+                                        <button type="submit" class="btn btn-primary">
+                                            Get Todays Weather
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
         <br/>
         <br/>
         <div class="col-sm-6">
@@ -121,8 +124,9 @@
       </div>
       <br />
       <br />
-      </div>
-    </main>
-    <%- include('partials/footer.ejs'); -%>
-  </body>
+                </div>
+            </main>
+            <%- include('partials/footer.ejs'); -%>
+    </body>
+
 </html>
