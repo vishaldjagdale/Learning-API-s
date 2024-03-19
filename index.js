@@ -5,6 +5,9 @@ import axios from "axios";
 import { fileURLToPath } from "url";
 // import pool from "pg";
 import path from "path";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const app = express();
 const port = 3000;
@@ -13,8 +16,8 @@ const db = new pg.Client({
   user: "postgres",
   host: "localhost",
   database: "learning_apis",
-  password: "@Drr9693",
-  // password: "india@11",
+  // password: "@Drr9693",
+  password: "india@11",
   // password: "112369",
 
   port: 5432,
@@ -37,32 +40,55 @@ app.set("view engine", "ejs"); // Set the view engine to use EJS templates
 
 //database functions
 async function verifyUsernameAndPassword(username, password) {
-    var pass1 = await db.query("SELECT password FROM users WHERE username = $1", [
-        username,
-    ]);
-    var pass1 = pass1.rows[0].password;
-    console.log(pass1);
+  var pass1 = await db.query("SELECT password FROM users WHERE username = $1", [
+    username,
+  ]);
+  var pass1 = pass1.rows[0].password;
+  console.log(pass1);
 
-    if (pass1) {
-        if (pass1 == password) {
-            return true;
-        } else {
-            return false;
-        }
+  if (pass1) {
+    if (pass1 == password) {
+      return true;
     } else {
-        return false; // change return logic here...
+      return false;
     }
+  } else {
+    return false; // change return logic here...
+  }
+}
+
+async function getWeather(longitude, latitude, res) {
+  const apiKey = process.env.WEATHER_API_KEY;
+  const apiUrl = "https://api.openweathermap.org/data/2.5/weather";
+
+  try {
+    const response = await axios.get(apiUrl, {
+      params: {
+        lat: latitude,
+        lon: longitude,
+        appid: apiKey,
+        units: "metric",
+      },
+    });
+
+    const data = response.data;
+
+    res.render("weather.ejs", { data });
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    res.status(500).json({ error: "Failed to fetch weather data" });
+  }
 }
 
 async function fetchJokes(limit) {
   try {
-    const response = await axios.get('https://api.api-ninjas.com/v1/jokes', {
+    const response = await axios.get("https://api.api-ninjas.com/v1/jokes", {
       params: {
-        limit: limit
+        limit: limit,
       },
       headers: {
-        'X-Api-Key': 'fSWD+Nl0yeDr0Kbn0McuEw==f0tVM2ksTHM73Sgy' // Replace 'YOUR_API_KEY' with your actual API key
-      }
+        "X-Api-Key": "fSWD+Nl0yeDr0Kbn0McuEw==f0tVM2ksTHM73Sgy", // Replace 'YOUR_API_KEY' with your actual API key
+      },
     });
     return response.data;
   } catch (error) {
@@ -71,18 +97,10 @@ async function fetchJokes(limit) {
 }
 
 app.get("/", async (req, res) => {
-  // res.render("login.ejs");
-   res.render("signup.ejs");
-});
-
-app.get("/login.ejs", async (req, res) => {
   res.render("login.ejs");
-  //  res.render("signup.ejs");
 });
 
 app.post("/login", async(req, res) => {
-
-  // res.render('login'); 
     //logic for login ..
     const username = req.body.username;
     const password = req.body.password;
@@ -96,6 +114,84 @@ app.post("/login", async(req, res) => {
         console.log("Incorrect password");
         res.redirect("/");
     }
+});
+
+app.get("/signup", (req, res) => {
+    //logic for signup ...
+});
+
+app.get("/main", (req, res) => {
+    // direct to the main page from anywhere : implement
+    res.render("index.ejs");
+});
+
+app.post("/cat", (req, res) => {
+    // code for returning api data ...
+});
+
+// const axios = require('axios');
+
+app.post("/randomImages", (req, res) => {
+  const apiUrl = 'https://source.unsplash.com/random/'; // Replace 'YOUR_API_URL' with the actual API URL
+
+  axios.get(apiUrl, { responseType: 'arraybuffer' }) // Set responseType to arraybuffer to receive image data
+    .then(response => {
+      const imageData = Buffer.from(response.data, 'binary').toString('base64'); // Convert image data to base64
+      const base64Image = `data:image/jpeg;base64,${imageData}`; // Create base64 image URL
+      res.send(`<img src="${base64Image}" alt="Random Image"/>`); // Send the image as HTML to the client
+    })
+    .catch(error => {
+      console.error('Request failed:', error.message);
+      res.status(500).send('Request failed'); // Sending an error response to the client
+    });
+});
+
+app.post("/quotes", async (req, res) => {
+  // code for returning api data ...
+  // code for returning api data ...
+
+  const apiUrl = "https://zenquotes.io/api/today";
+
+  try {
+    const response = await axios.get(apiUrl);
+    const data = response.data[0];
+    // console.log(response.data[0]);
+    res.render("quotes.ejs", {
+      data: data,
+    });
+  } catch (error) {
+    console.error("Error fetching Quotes data:", error);
+    res.status(500).json({ error: "Failed to fetch Quotes data" });
+  }
+  
+});
+
+
+
+app.get("/", async (req, res) => {
+  // res.render("login.ejs");
+   res.render("signup.ejs");
+});
+
+app.get("/login.ejs", async (req, res) => {
+  res.render("login.ejs");
+  //  res.render("signup.ejs");
+});
+
+app.post("/login", async (req, res) => {
+  //logic for login ..
+  const username = req.body.username;
+  const password = req.body.password;
+
+  // verify username and  password
+  const result = await verifyUsernameAndPassword(username, password);
+
+  if (result) {
+    res.redirect("/main");
+  } else {
+    console.log("Incorrect password");
+    res.redirect("/");
+  }
 });
 
 app.post('/signup', async (req, res) => {
@@ -115,12 +211,25 @@ app.post('/signup', async (req, res) => {
 
 
 app.get("/main", (req, res) => {
-    // direct to the main page from anywhere : implement
-    res.render("index.ejs");
+  // direct to the main page from anywhere : implement
+  res.render("index.ejs");
 });
 
-app.post("/cat", (req, res) => {
-    // code for returning api data ...
+app.get("/cat", async (req, res) => {
+  // code for returning api data ...
+
+  const apiUrl = "https://api.thecatapi.com/v1/images/search";
+
+  try {
+    const response = await axios.get(apiUrl);
+    // console.log(response.data);
+    res.render("cat.ejs", {
+      response: response.data[0].url,
+    });
+  } catch (error) {
+    console.error("Error fetching weather data:", error);
+    res.status(500).json({ error: "Failed to fetch weather data" });
+  }
 });
 
 
@@ -141,11 +250,12 @@ app.post("/cat", (req, res) => {
 // });
 
 app.post("/randomImages", (req, res) => {
-  const apiUrl = 'https://source.unsplash.com/random/'; // Replace 'YOUR_API_URL' with the actual API URL
+  const apiUrl = "https://source.unsplash.com/random/"; // Replace 'YOUR_API_URL' with the actual API URL
 
-  axios.get(apiUrl, { responseType: 'arraybuffer' }) // Set responseType to arraybuffer to receive image data
-    .then(response => {
-      const imageData = Buffer.from(response.data, 'binary').toString('base64'); // Convert image data to base64
+  axios
+    .get(apiUrl, { responseType: "arraybuffer" }) // Set responseType to arraybuffer to receive image data
+    .then((response) => {
+      const imageData = Buffer.from(response.data, "binary").toString("base64"); // Convert image data to base64
       const base64Image = `data:image/jpeg;base64,${imageData}`; // Create base64 image URL
       const imgWidth = req.body.width || 700; // Default width is 400 if not specified
       const imgHeight = req.body.height || 700; // Default height is 300 if not specified
@@ -159,45 +269,31 @@ app.post("/randomImages", (req, res) => {
 
       res.send(htmlResponse); // Send the HTML response to the client
     })
-    .catch(error => {
-      console.error('Request failed:', error.message);
-      res.status(500).send('Request failed'); // Sending an error response to the client
+    .catch((error) => {
+      console.error("Request failed:", error.message);
+      res.status(500).send("Request failed"); // Sending an error response to the client
     });
 });
 
 
 
-
-
-
-app.post("/quotes", (req, res) => {
+app.post("/quotes", async (req, res) => {
   // code for returning api data ...
-  
-  
-});
 
-async function getWeather(longitude, latitude, res) {
-  const apiKey = "90c525eba6dce8ed86c569dce30449d8";
-  const apiUrl = "https://api.openweathermap.org/data/2.5/weather";
+  const apiUrl = "https://zenquotes.io/api/today";
 
   try {
-    const response = await axios.get(apiUrl, {
-      params: {
-        lat: latitude,
-        lon: longitude,
-        appid: apiKey,
-        units: "metric",
-      },
+    const response = await axios.get(apiUrl);
+    const data = response.data[0];
+    // console.log(response.data[0]);
+    res.render("quotes.ejs", {
+      data: data,
     });
-
-        const data = response.data;
-
-    res.render("weather.ejs", { data });
   } catch (error) {
-    console.error("Error fetching weather data:", error);
-    res.status(500).json({ error: "Failed to fetch weather data" });
+    console.error("Error fetching Quotes data:", error);
+    res.status(500).json({ error: "Failed to fetch Quotes data" });
   }
-}
+});
 
 app.get("/weather", async (req, res) => {
   const latitude = 18.51;
@@ -212,20 +308,19 @@ app.post("/weather", async (req, res) => {
 
 app.post("/jokes", async (req, res) => {
   const limit = 3; // Set your desired limit here
-  
+
   try {
     const response = await fetchJokes(limit);
     // console.log(response);
     // res.send(response);
     const data = response;
     res.render("jokes.ejs", { data });
-
   } catch (error) {
-    console.error('Request failed:', error);
-    res.status(500).send('Request failed');
+    console.error("Request failed:", error);
+    res.status(500).send("Request failed");
   }
 });
 
 app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
+  console.log(`Server running on port ${port}`);
 });

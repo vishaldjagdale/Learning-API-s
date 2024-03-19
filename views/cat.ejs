@@ -1,39 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
+  <%- include('partials/head.ejs'); -%>
 
-<%- include('partials/head.ejs'); -%>
+  <body>
+    <%- include('partials/header.ejs'); -%>
 
-    <body>
-        <%- include('partials/header.ejs'); -%>
+    <!-- <div class="row row-cols-1 row-cols-md-3 g-4"> -->
+    <!-- <div class="col"></div> -->
+    <div class="col text-center">
+      <!-- Center the column content horizontally -->
+      <div class="card d-inline-block">
+        <!-- Use d-inline-block to make the card width match the content -->
+        <img
+          src="<%= response %>"
+          class="card-img-top"
+          alt="Cat image, unable to load"
+          id="catImage"
+          style="height: 500px"
+        />
 
-            <h1>Get Generator</h1>
-            <h3>It is one of the most Basic Projects on APIs to start with. Call the API, get a cute random Cat Image/Gif, display it beautifully and you are done!</h3>
+        <div class="card-body">
+          <h5 class="card-title">Cat</h5>
+          <p class="card-text">
+            This card has supporting text below as a natural lead-in to
+            additional content.
+          </p>
+          <button
+            type="button"
+            class="btn btn-outline-dark"
+            onclick="window.location.href='/cat'"
+          >
+            Generate Cat
+          </button>
+          <button
+            type="button"
+            class="btn btn-outline-dark"
+            onclick="window.location.href='/main'"
+          >
+            Go Home
+          </button>
+        </div>
+        <div class="card-footer">
+          <small class="text-body-secondary">Last updated 3 mins ago</small>
+        </div>
+      </div>
+    </div>
 
-            <body style="background-color: hsl(168, 90%, 16%);"></body>
-            <div class="cat">
-                <button class="1" id="generateCatBtn">Generate Cat</button>
-                <img id="catImage" alt="Random Cat Image">
-                <button class="2">Home Page</button>
-                <img src="https://cdn2.thecatapi.com/images/cse.gif">
-            </div>
+    <!-- <div class="col"></div> -->
+    <!-- </div> -->
 
+    <!-- Display the cat GIF -->
+    <!-- <img src="<%= response %>" alt="Cat GIF" /> -->
 
+    <%- include('partials/footer.ejs'); -%>
+  </body>
+  <script>
+    window.onload = function () {
+      const img = document.getElementById("catImage");
+      const aspectRatio = img.naturalWidth / img.naturalHeight;
+      const fixedHeight = 500; // Fixed height in pixels
 
-
-
-
-            <div class="text-center">
-                <img src="..." class="rounded" alt="...">
-            </div>
-
-
-            </div>
-
-
-            </div>
-            <%- include('partials/footer.ejs'); -%>
-
-    </body>
-
-
+      img.style.width = fixedHeight * aspectRatio + "px";
+    };
+  </script>
 </html>
