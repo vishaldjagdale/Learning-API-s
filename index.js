@@ -6,7 +6,6 @@ import { fileURLToPath } from "url";
 // import pool from "pg";
 import path from "path";
 import dotenv from "dotenv";
-
 dotenv.config();
 
 const app = express();
@@ -16,8 +15,8 @@ const db = new pg.Client({
   user: "postgres",
   host: "localhost",
   database: "learning_apis",
-  // password: "@Drr9693",
-  password: "india@11",
+  password: "@Drr9693",
+  // password: "india@11",
   // password: "112369",
 
   port: 5432,
@@ -125,9 +124,6 @@ app.get("/main", (req, res) => {
     res.render("index.ejs");
 });
 
-app.post("/cat", (req, res) => {
-    // code for returning api data ...
-});
 
 // const axios = require('axios');
 
