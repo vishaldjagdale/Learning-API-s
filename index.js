@@ -3,6 +3,7 @@ import bodyParser from "body-parser";
 import pg from "pg";
 import axios from "axios";
 import { fileURLToPath } from "url";
+// import pool from "pg";
 import path from "path";
 
 const app = express();
@@ -70,10 +71,18 @@ async function fetchJokes(limit) {
 }
 
 app.get("/", async (req, res) => {
+  // res.render("login.ejs");
+   res.render("signup.ejs");
+});
+
+app.get("/login.ejs", async (req, res) => {
   res.render("login.ejs");
+  //  res.render("signup.ejs");
 });
 
 app.post("/login", async(req, res) => {
+
+  // res.render('login'); 
     //logic for login ..
     const username = req.body.username;
     const password = req.body.password;
@@ -89,9 +98,21 @@ app.post("/login", async(req, res) => {
     }
 });
 
-app.get("/signup", (req, res) => {
-    //logic for signup ...
+app.post('/signup', async (req, res) => {
+  const { username, email, name, phone, password } = req.body;
+  // console.log(username);
+  try {
+      // Insert user data into the database
+      const query = 'INSERT INTO users (username, email, name, phone_number, password) VALUES ($1, $2, $3, $4, $5)';
+      await db.query(query, [username, email, name, phone, password]);
+
+      res.send('Signup successful!');
+  } catch (error) {
+      console.error('Error executing query', error);
+      res.status(500).send('Signup failed!');
+  }
 });
+
 
 app.get("/main", (req, res) => {
     // direct to the main page from anywhere : implement
@@ -102,7 +123,22 @@ app.post("/cat", (req, res) => {
     // code for returning api data ...
 });
 
-// const axios = require('axios');
+
+
+// app.post("/randomImages", (req, res) => {
+//   const apiUrl = 'https://source.unsplash.com/random/'; // Replace 'YOUR_API_URL' with the actual API URL
+
+//   axios.get(apiUrl, { responseType: 'arraybuffer' }) // Set responseType to arraybuffer to receive image data
+//     .then(response => {
+//       const imageData = Buffer.from(response.data, 'binary').toString('base64'); // Convert image data to base64
+//       const base64Image = `data:image/jpeg;base64,${imageData}`; // Create base64 image URL
+//       res.send(`<img src="${base64Image}" alt="Random Image"/>`); // Send the image as HTML to the client
+//     })
+//     .catch(error => {
+//       console.error('Request failed:', error.message);
+//       res.status(500).send('Request failed'); // Sending an error response to the client
+//     });
+// });
 
 app.post("/randomImages", (req, res) => {
   const apiUrl = 'https://source.unsplash.com/random/'; // Replace 'YOUR_API_URL' with the actual API URL
@@ -111,13 +147,25 @@ app.post("/randomImages", (req, res) => {
     .then(response => {
       const imageData = Buffer.from(response.data, 'binary').toString('base64'); // Convert image data to base64
       const base64Image = `data:image/jpeg;base64,${imageData}`; // Create base64 image URL
-      res.send(`<img src="${base64Image}" alt="Random Image"/>`); // Send the image as HTML to the client
+      const imgWidth = req.body.width || 700; // Default width is 400 if not specified
+      const imgHeight = req.body.height || 700; // Default height is 300 if not specified
+      
+      // Construct the HTML response with centered image
+      const htmlResponse = `
+        <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+          <img src="${base64Image}" alt="Random Image" width="${imgWidth}" height="${imgHeight}"/>
+        </div>
+      `;
+
+      res.send(htmlResponse); // Send the HTML response to the client
     })
     .catch(error => {
       console.error('Request failed:', error.message);
       res.status(500).send('Request failed'); // Sending an error response to the client
     });
 });
+
+
 
 
 
