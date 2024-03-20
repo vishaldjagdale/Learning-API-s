@@ -1,41 +1,89 @@
 <!DOCTYPE html>
 <html lang="en">
-  <%- include('partials/head.ejs'); -%>
+<%- include('partials/head.ejs'); -%>
 
-  <style>
-    /* Add your CSS styles here */
-    body {
-        background: beige;
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-    }
-    h1 {
-        margin-left: 30%;
-      color: red;
-      padding-bottom: 10px;
-    }
-    ul {
-       margin-left: 30%;
-      list-style-type: none;
-      padding: 0;
-    }
-    li {
-      margin-bottom: 10px;
-    }
-  </style>
+    <style>
+        .btn-primary {
+            background-color: blue;
+            color: white;
+        }
+        /* Make the second button transparent */
+        
+        .btn-secondary {
+            background-color: transparent;
+            color: black;
+            /* Change text color for visibility */
+        }
+        /* Make the modal background transparent */
+        
+        .modal-content {
+            background-color: rgba(255, 255, 255, 0.9);
+            /* Adjust opacity as needed */
+        }
+        
+        .modal-footer .btn-primary {
+            margin-bottom: 10px;
+            /* Adjust the margin-bottom value as needed */
+        }
+    </style>
 
-  <body>
-    <%- include('partials/header.ejs'); -%>
+    <body>
 
-    <h1>4. Random code generator App :</h1>
+        <div class="modal modal-sheet position-static d-block bg-body-secondary p-4 py-md-5" tabindex="-1" role="dialog" id="modalSheet">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content rounded-4 shadow">
+                    <div class="modal-header border-bottom-0">
+                        <h1 class="modal-title fs-5">Here's random joke:</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body py-0">
+                        <!-- <p>This is a modal sheet, a variation of the modal that docs itself to the bottom of the viewport like the newer share sheets in iOS.</p> -->
 
-    <ul>
-      <li>1: <%= data[0].joke%> K</li>
-      <li>2: <%= data[1].joke%> K</li>
-      <li>3: <%= data[2].joke%> K</li>
-    </ul>
+                        <div class="design">
+                            <ul>
+                                <li>1:
+                                    <%= data[0].joke%>
+                                </li>
+                                <li>2:
+                                    <%= data[1].joke%>
+                                </li>
+                                <li>3:
+                                    <%= data[2].joke%>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="modal-footer flex-column align-items-stretch w-100 gap-2 pb-3 border-top-0">
+                        <button type="button" class="btn btn-lg btn-primary" onclick="window.location.href='/jokes'">generate new
+              joke
+            </button>
+                        <button type="button" class="btn btn-lg btn-secondary" onclick="window.location.href='/main'" data-bs-dismiss="modal">Home</button>
 
-    <%- include('partials/footer.ejs'); -%>
-  </body>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+        <!-- <h1>Here's Your Joke :
+            <button>Generate another joke</button>
+        </h1>
+
+
+        <ul>
+            <li>1:
+                <%= data[0].joke%> K</li>
+            <li>2:
+                <%= data[1].joke%> K</li>
+            <li>3:
+                <%= data[2].joke%> K</li>
+        </ul> -->
+
+        <!-- <%- include('partials/footer.ejs'); -%> -->
+
+
+
+    </body>
+
 </html>
