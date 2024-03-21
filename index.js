@@ -42,18 +42,22 @@ async function verifyUsernameAndPassword(username, password) {
   var pass1 = await db.query("SELECT password FROM users WHERE username = $1", [
     username,
   ]);
-  var pass1 = pass1.rows[0].password;
   console.log(pass1);
-
-  if (pass1) {
+  
+  if (pass1.rows[0]) {
+    var pass1 = pass1.rows[0].password;
     if (pass1 == password) {
       return true;
     } else {
       return false;
     }
   } else {
-    return false; // change return logic here...
+    return NaN; // change return logic here...
   }
+}
+
+async function verifyEmail(email){
+  var email1=await db.query("SELECT email FROM users WHERE username = $1",[email])
 }
 
 async function getWeather(longitude, latitude, res) {
@@ -109,14 +113,25 @@ app.post("/login", async(req, res) => {
 
     if (result) {
         res.redirect("/main");
-    } else {
+    } else if (result == false) {
         console.log("Incorrect password");
-        res.redirect("/");
+        res.redirect("/wrong_password");
+    }
+    else
+    {
+      console.log("username doesn't exist");
+      res.redirect("/");
     }
 });
 
 app.get("/signup", (req, res) => {
     //logic for signup ...
+    res.render("signup.ejs");
+});
+
+app.get("/wrong_password", (req, res) => {
+  //logic for signup ...
+  res.render("wrong_password.ejs");
 });
 
 app.get("/main", (req, res) => {
@@ -165,30 +180,20 @@ app.post("/quotes", async (req, res) => {
 
 
 app.get("/", async (req, res) => {
-  // res.render("login.ejs");
-   res.render("signup.ejs");
-});
-
-app.get("/login.ejs", async (req, res) => {
   res.render("login.ejs");
   //  res.render("signup.ejs");
 });
 
-app.post("/login", async (req, res) => {
-  //logic for login ..
-  const username = req.body.username;
-  const password = req.body.password;
-
-  // verify username and  password
-  const result = await verifyUsernameAndPassword(username, password);
-
-  if (result) {
-    res.redirect("/main");
-  } else {
-    console.log("Incorrect password");
-    res.redirect("/");
-  }
+app.get("/login", async (req, res) => {
+  res.render("login.ejs");
+  //  res.render("signup.ejs");
 });
+
+app.get("/update_password", async (req, res) => {
+  res.render("update_password.ejs");
+  //  res.render("signup.ejs");
+});
+
 
 app.post('/signup', async (req, res) => {
   const { username, email, name, phone, password } = req.body;
