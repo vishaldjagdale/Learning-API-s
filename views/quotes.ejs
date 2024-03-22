@@ -1,33 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
+  <%- include('partials/head.ejs'); -%>
 
-<%- include('partials/head.ejs'); -%>
+  <body>
+    <%- include('partials/header.ejs'); -%>
 
+    <div class="card text-center">
+      <div class="card-header">Quotes</div>
+      <div class="card-body">
+        <h5 class="card-title"><%=data.q %></h5>
+        <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
+        <button type="button" class="btn btn-outline-info">
+          <%= data.a %>
+        </button>
+      </div>
+      <div class="card-footer text-body-secondary">2 days ago</div>
+    </div>
 
-    <body>
-        <%- include('partials/header.ejs'); -%>
+    <!-- <%- data.h %> -->
 
-
-            <div class="card text-center">
-                <div class="card-header">
-                    Quotes
-                </div>
-                <div class="card-body">
-                    <h5 class="card-title">
-                        <%=data.q %>
-                    </h5>
-                    <!-- <p class="card-text">With supporting text below as a natural lead-in to additional content.</p> -->
-                    <button type="button" class="btn btn-outline-info"><%= data.a %></button>
-                </div>
-                <div class="card-footer text-body-secondary">
-                    2 days ago
-                </div>
-            </div>
-
-            <!-- <%- data.h %> -->
-
-            <%- include('partials/footer.ejs'); -%>
-
-    </body>
-
+    <%- include('partials/footer.ejs'); -%>
+  </body>
 </html>

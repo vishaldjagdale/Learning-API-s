@@ -15,8 +15,8 @@ const db = new pg.Client({
   user: "postgres",
   host: "localhost",
   database: "learning_apis",
-  password: "@Drr9693",
-  // password: "india@11",
+  // password: "@Drr9693",
+  password: "india@11",
   // password: "112369",
 
   port: 5432,
@@ -42,17 +42,18 @@ async function verifyUsernameAndPassword(username, password) {
   var pass1 = await db.query("SELECT password FROM users WHERE username = $1", [
     username,
   ]);
-  var pass1 = pass1.rows[0].password;
-  console.log(pass1);
+  // console.log(pass1);
+  // console.log(pass1);
 
-  if (pass1) {
+  if (pass1.rows[0]) {
+    var pass1 = pass1.rows[0].password;
     if (pass1 == password) {
       return true;
     } else {
       return false;
     }
   } else {
-    return false; // change return logic here...
+    return NaN; // change return logic here...
   }
 }
 
@@ -99,46 +100,50 @@ app.get("/", async (req, res) => {
   res.render("login.ejs");
 });
 
-app.post("/login", async(req, res) => {
-    //logic for login ..
-    const username = req.body.username;
-    const password = req.body.password;
+app.post("/login", async (req, res) => {
+  //logic for login ..
+  const username = req.body.username;
+  const password = req.body.password;
 
-    // verify username and  password
-    const result = await verifyUsernameAndPassword(username, password);
+  // verify username and  password
+  const result = await verifyUsernameAndPassword(username, password);
 
-    if (result) {
-        res.redirect("/main");
-    } else {
-        console.log("Incorrect password");
-        res.redirect("/");
-    }
+  if (result) {
+    res.redirect("/main");
+  } else if (result == false) {
+    // write logic for forgot password
+    console.log("Incorrect password");
+    res.redirect("/");
+  } else {
+    console.log("Account doesn't exist, do Sign up");
+    res.render("signup.ejs");
+  }
 });
 
 app.get("/signup", (req, res) => {
-    //logic for signup ...
+  //logic for signup ...
 });
 
 app.get("/main", (req, res) => {
-    // direct to the main page from anywhere : implement
-    res.render("index.ejs");
+  // direct to the main page from anywhere : implement
+  res.render("index.ejs");
 });
-
 
 // const axios = require('axios');
 
 app.post("/randomImages", (req, res) => {
-  const apiUrl = 'https://source.unsplash.com/random/'; // Replace 'YOUR_API_URL' with the actual API URL
+  const apiUrl = "https://source.unsplash.com/random/"; // Replace 'YOUR_API_URL' with the actual API URL
 
-  axios.get(apiUrl, { responseType: 'arraybuffer' }) // Set responseType to arraybuffer to receive image data
-    .then(response => {
-      const imageData = Buffer.from(response.data, 'binary').toString('base64'); // Convert image data to base64
+  axios
+    .get(apiUrl, { responseType: "arraybuffer" }) // Set responseType to arraybuffer to receive image data
+    .then((response) => {
+      const imageData = Buffer.from(response.data, "binary").toString("base64"); // Convert image data to base64
       const base64Image = `data:image/jpeg;base64,${imageData}`; // Create base64 image URL
       res.send(`<img src="${base64Image}" alt="Random Image"/>`); // Send the image as HTML to the client
     })
-    .catch(error => {
-      console.error('Request failed:', error.message);
-      res.status(500).send('Request failed'); // Sending an error response to the client
+    .catch((error) => {
+      console.error("Request failed:", error.message);
+      res.status(500).send("Request failed"); // Sending an error response to the client
     });
 });
 
@@ -159,14 +164,11 @@ app.post("/quotes", async (req, res) => {
     console.error("Error fetching Quotes data:", error);
     res.status(500).json({ error: "Failed to fetch Quotes data" });
   }
-  
 });
-
-
 
 app.get("/", async (req, res) => {
   // res.render("login.ejs");
-   res.render("signup.ejs");
+  res.render("signup.ejs");
 });
 
 app.get("/login.ejs", async (req, res) => {
@@ -190,21 +192,21 @@ app.post("/login", async (req, res) => {
   }
 });
 
-app.post('/signup', async (req, res) => {
+app.post("/signup", async (req, res) => {
   const { username, email, name, phone, password } = req.body;
   // console.log(username);
   try {
-      // Insert user data into the database
-      const query = 'INSERT INTO users (username, email, name, phone_number, password) VALUES ($1, $2, $3, $4, $5)';
-      await db.query(query, [username, email, name, phone, password]);
+    // Insert user data into the database
+    const query =
+      "INSERT INTO users (username, email, name, phone_number, password) VALUES ($1, $2, $3, $4, $5)";
+    await db.query(query, [username, email, name, phone, password]);
 
-      res.send('Signup successful!');
+    res.send("Signup successful!");
   } catch (error) {
-      console.error('Error executing query', error);
-      res.status(500).send('Signup failed!');
+    console.error("Error executing query", error);
+    res.status(500).send("Signup failed!");
   }
 });
-
 
 app.get("/main", (req, res) => {
   // direct to the main page from anywhere : implement
@@ -227,8 +229,6 @@ app.get("/cat", async (req, res) => {
     res.status(500).json({ error: "Failed to fetch weather data" });
   }
 });
-
-
 
 // app.post("/randomImages", (req, res) => {
 //   const apiUrl = 'https://source.unsplash.com/random/'; // Replace 'YOUR_API_URL' with the actual API URL
@@ -255,7 +255,7 @@ app.post("/randomImages", (req, res) => {
       const base64Image = `data:image/jpeg;base64,${imageData}`; // Create base64 image URL
       const imgWidth = req.body.width || 700; // Default width is 400 if not specified
       const imgHeight = req.body.height || 700; // Default height is 300 if not specified
-      
+
       // Construct the HTML response with centered image
       const htmlResponse = `
         <div style="display: flex; justify-content: center; align-items: center; height: 100vh;">
@@ -270,8 +270,6 @@ app.post("/randomImages", (req, res) => {
       res.status(500).send("Request failed"); // Sending an error response to the client
     });
 });
-
-
 
 app.post("/quotes", async (req, res) => {
   // code for returning api data ...
